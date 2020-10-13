@@ -19,10 +19,31 @@ class ViewController: UIViewController {
 
     @IBAction func submit(_ sender: Any) {
         
-        let url = URL(string: "http://api.openweathermap.org/data/2.5/weather?q=Bieruń&appid=127bd3c7027c52a48bb18c318d0e89c3")
-        print(url ?? "Udało się pobrać dane")
+        print("Starting")
         
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=127bd3c7027c52a48bb18c318d0e89c3")
+        
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            if error != nil {
+                print(error!)
+            }else{
+                if let urlContent = data {
+                    
+                    do {
+                        let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                        
+                        print(jsonResult)
+                        
+                    } catch  {
+                        print("Błąd danych JSON")
+                    }
+                }
+            }
+        }
+        
+        task.resume()
     }
-    
+
+
 }
 
